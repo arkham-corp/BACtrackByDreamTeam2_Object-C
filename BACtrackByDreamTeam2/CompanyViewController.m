@@ -13,6 +13,8 @@
 {
     NSMutableData *receivedData;
 }
+@property (nonatomic) Reachability *hostReachability;
+@property (nonatomic) Reachability *internetReachability;
 
 @end
 
@@ -20,6 +22,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     [self setTitle:@"会社"];
     
     buttonExec.exclusiveTouch = true;
@@ -30,12 +33,34 @@
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
     numberTextField.text = [ud stringForKey:KEY_COMPANY];
     
-//20231214
-    [ud setObject:@"0" forKey:KEY_CONECTION_STATUS];
-    [ud synchronize];
-//20231214
+    NSString *status = [ud stringForKey:KEY_CONECTION_STATUS];
+    if([status isEqual:(@"1")]) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"注意" message:@"インターネットに接続できませんが。測定を続けますか？" preferredStyle:UIAlertControllerStyleAlert];
 
+        [alertController addAction:[UIAlertAction actionWithTitle:@"はい" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            
+            self->buttonExec.enabled = true;
+            
+            NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+            [ud setObject:@"1" forKey:KEY_CHECK_MODE];
+            [ud synchronize];
 
+         }]];
+
+       [alertController addAction:[UIAlertAction actionWithTitle:@"いいえ" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+           
+           self->buttonExec.enabled = false;
+           
+           NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+           [ud setObject:@"0" forKey:KEY_CHECK_MODE];
+           [ud synchronize];
+           
+         }]];
+
+       [self presentViewController:alertController animated:YES completion:nil];
+        
+    }
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -71,19 +96,36 @@
 //20231214
 //    [self getApplicationApiUrl];
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    NSString *status = [ud stringForKey:KEY_CONECTION_STATUS];
+    NSString *status = [ud stringForKey:KEY_CHECK_MODE];
 
     if([status isEqual:(@"0")]) {
+        
         [self getApplicationApiUrl];
+        
     } else {
-        // 値保存
-        [ud setObject:numberTextField.text forKey:KEY_COMPANY];
-        [ud setObject:@"" forKey:KEY_HTTP_URL];
-        [ud setObject:@"0" forKey:KEY_ALCOHOL_VALUE_DIV];
-        [ud synchronize];
-        // GPS画面に移動
-        gpsViewController = [[GPSViewController alloc] initWithNibName:@"GPSViewController" bundle:nil];
-        [self.navigationController pushViewController:gpsViewController animated:YES];
+        if([numberTextField.text isEqual:(@"")]) {
+            UIAlertController *alertController = [UIAlertController 
+                                                alertControllerWithTitle:@"エラー"
+                                                message:@"会社コードを入力して下さい"
+                                                preferredStyle:UIAlertControllerStyleAlert];
+           [alertController addAction:[UIAlertAction actionWithTitle:@"OK"
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:^(UIAlertAction *action)
+           {
+               self->buttonExec.enabled = true;
+           }]];
+           [self presentViewController:alertController animated:YES completion:nil];
+
+        } else {
+            // 値保存
+            [ud setObject:numberTextField.text forKey:KEY_COMPANY];
+            [ud setObject:@"" forKey:KEY_HTTP_URL];
+            [ud setObject:@"1" forKey:KEY_ALCOHOL_VALUE_DIV];//0:血中1:呼気２:両方
+            [ud synchronize];
+            // GPS画面に移動
+            gpsViewController = [[GPSViewController alloc] initWithNibName:@"GPSViewController" bundle:nil];
+            [self.navigationController pushViewController:gpsViewController animated:YES];
+        }
     }
 //20231214
 
@@ -264,7 +306,7 @@
     else
     {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"エラー"
-                                                                                 message:@"会社がデータベースに存在しません"
+                                                                                 message:@"会社が見つかりません"
                                                                                  preferredStyle:UIAlertControllerStyleAlert];
        //下記のコードでボタンを追加します。また{}内に記述された処理がボタン押下時の処理なります。
        [alertController addAction:[UIAlertAction actionWithTitle:@"OK"
@@ -392,19 +434,19 @@
           [[error userInfo] objectForKey:NSURLErrorFailingURLStringErrorKey]);
     
      UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"サーバーへ接続できませんでした" message:@"通信は行わず,測定を続けますか？" preferredStyle:UIAlertControllerStyleAlert];
-
-    //下記のコードでボタンを追加します。また{}内に記述された処理がボタン押下時の処理なります。
-     [alertController addAction:[UIAlertAction actionWithTitle:@"はい" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-            [ud setObject:@"1" forKey:KEY_CONECTION_STATUS];
+    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"はい" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [ud setObject:@"1" forKey:KEY_CHECK_MODE];
             [ud synchronize];
             self->buttonExec.enabled = true;
             [self setTitle:@"会社（無通信モード）"];
 
-      }]];
+    }]];
 
     [alertController addAction:[UIAlertAction actionWithTitle:@"いいえ" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        //ボタンがタップされた際の処理
+        [ud setObject:@"0" forKey:KEY_CHECK_MODE];
+        [ud synchronize];
         self->buttonExec.enabled = false;
       }]];
 

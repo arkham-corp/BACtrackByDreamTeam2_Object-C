@@ -34,6 +34,7 @@
 #define KEY_FREE_TITLE3 @"KEY_FREE_TITLE3"
 #define KEY_SEND_FLG @"KEY_SEND_FLG"
 #define KEY_CONECTION_STATUS @"KEY_CONECTION_STATUS"
+#define KEY_CHECK_MODE @"KEY_CHECK_MODE"
 
 #define APP_VERSION_URL @"http://itunes.apple.com/lookup?id="
 #define APP_UPDATE_URL @"itms-apps://itunes.apple.com/app/id"

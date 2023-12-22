@@ -13,21 +13,43 @@
 {
     NSMutableData *receivedData;
 }
+@property (nonatomic) Reachability *hostReachability;
+@property (nonatomic) Reachability *internetReachability;
 
 @end
 
 @implementation MainViewController
 
+//@synthesize currentReachability;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // 前回値取得
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NSString *agreement = [ud stringForKey:KEY_AGREEMENT];
+    [ud setObject:@"0" forKey:KEY_CONECTION_STATUS];//0:接続1:未接続
+    [ud setObject:@"0" forKey:KEY_CHECK_MODE];//0:通常1:サーバーへ通信せずに処理を続ける
+    [ud synchronize];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    
+    NSString *remoteHostName = [NSString stringWithFormat: @"%@", HTTP_HOST_NAME];
+    //NSString *remoteHostLabelFormatString = NSLocalizedString(@"Remote Host: %@", @"Remote host label format string");
+    
+    self.hostReachability = [Reachability reachabilityWithHostName:remoteHostName];
+    [self.hostReachability startNotifier];
+    //[self updateInterfaceWithReachability:self.hostReachability];
+
+    self.internetReachability = [Reachability reachabilityForInternetConnection];
+    [self.internetReachability startNotifier];
+    //[self updateInterfaceWithReachability:self.internetReachability];
+
     [self setTitle:@"トップ画面"];
     
     buttonExec.exclusiveTouch = true;
     buttonExec.enabled = false;
     
-    // 前回値取得
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    NSString *agreement = [ud stringForKey:KEY_AGREEMENT];
     
     // 利用規約判定
     if (![agreement isEqualToString:@"1"])
@@ -55,6 +77,12 @@
     }
     
     [self versionCeck];
+    
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
 }
 
 - (void)versionCeck
@@ -183,6 +211,37 @@
     buttonExec.enabled = false;
     companyViewController = [[CompanyViewController alloc] initWithNibName:@"CompanyViewController" bundle:nil];
     [self.navigationController pushViewController:companyViewController animated:YES];
+}
+
+
+- (void) reachabilityChanged:(NSNotification *)note
+{
+    Reachability* reachability = [note object];
+    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    NetworkStatus netStatus = [reachability currentReachabilityStatus];
+    
+    switch (netStatus)
+    {
+        case NotReachable:        {
+            [ud setObject:@"1" forKey:KEY_CONECTION_STATUS];
+            [ud setObject:@"0" forKey:KEY_CHECK_MODE];
+            [ud synchronize];
+            break;
+        }
+        case ReachableViaWWAN:        {
+            [ud setObject:@"0" forKey:KEY_CONECTION_STATUS];
+            [ud setObject:@"0" forKey:KEY_CHECK_MODE];
+            [ud synchronize];
+            break;
+        }
+        case ReachableViaWiFi:        {
+            [ud setObject:@"0" forKey:KEY_CONECTION_STATUS];
+            [ud setObject:@"0" forKey:KEY_CHECK_MODE];
+            [ud synchronize];
+            break;
+        }
+    }
 }
 
 @end

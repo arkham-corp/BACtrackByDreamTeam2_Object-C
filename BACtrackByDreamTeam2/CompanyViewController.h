@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MenuViewController.h"
 #import "GPSViewController.h"
+#import "Reachability.h"
 
 @interface CompanyViewController : UIViewController <UITextFieldDelegate>
 {

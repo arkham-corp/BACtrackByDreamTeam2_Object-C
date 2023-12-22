@@ -22,7 +22,7 @@
     
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
 //20231214
-    NSString *status = [ud stringForKey:KEY_CONECTION_STATUS];
+    NSString *status = [ud stringForKey:KEY_CHECK_MODE];
 
     if([status isEqual:(@"0")]) {
         [self setTitle:@"車番"];
@@ -71,7 +71,7 @@
     
 //20231214
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    NSString *status = [ud stringForKey:KEY_CONECTION_STATUS];
+    NSString *status = [ud stringForKey:KEY_CHECK_MODE];
 
     if([status isEqual:(@"0")]) {
         // 接続先
@@ -101,14 +101,29 @@
         [task resume];
         
     } else {
-        // 値保存
-        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-        [ud setObject:numberTextField.text forKey:KEY_CAR_NO];
-        [ud synchronize];
-        
-        // 移動
-        inspectionViewController = [[InspectionViewController alloc] initWithNibName:@"InspectionViewController" bundle:nil];
-        [self.navigationController pushViewController:inspectionViewController animated:YES];
+        if([numberTextField.text isEqual:(@"")]) {
+            UIAlertController *alertController = [UIAlertController
+                                                alertControllerWithTitle:@"エラー"
+                                                message:@"車番を入力して下さい"
+                                                preferredStyle:UIAlertControllerStyleAlert];
+           [alertController addAction:[UIAlertAction actionWithTitle:@"OK"
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:^(UIAlertAction *action)
+           {
+               self->buttonExec.enabled = true;
+           }]];
+           [self presentViewController:alertController animated:YES completion:nil];
+
+        } else {
+            // 値保存
+            NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+            [ud setObject:numberTextField.text forKey:KEY_CAR_NO];
+            [ud synchronize];
+            
+            // 移動
+            inspectionViewController = [[InspectionViewController alloc] initWithNibName:@"InspectionViewController" bundle:nil];
+            [self.navigationController pushViewController:inspectionViewController animated:YES];
+        }
         
     }
 //20231214
@@ -172,7 +187,7 @@
     else
     {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"エラー"
-                                                                                 message:@"車番がデータベースに存在しません"
+                                                                                 message:@"車番が登録されていません"
                                                                                  preferredStyle:UIAlertControllerStyleAlert];
        //下記のコードでボタンを追加します。また{}内に記述された処理がボタン押下時の処理なります。
        [alertController addAction:[UIAlertAction actionWithTitle:@"OK"
@@ -196,9 +211,9 @@
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"サーバーへ接続できませんでした" message:@"通信は行わず,測定を続けますか？" preferredStyle:UIAlertControllerStyleAlert];
 
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
     [alertController addAction:[UIAlertAction actionWithTitle:@"はい" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-        [ud setObject:@"1" forKey:KEY_CONECTION_STATUS];
+        [ud setObject:@"1" forKey:KEY_CHECK_MODE];
         [ud synchronize];
         self->buttonExec.enabled = true;
         [self setTitle:@"車番（無通信モード）"];
@@ -206,6 +221,8 @@
      }]];
 
    [alertController addAction:[UIAlertAction actionWithTitle:@"いいえ" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+       [ud setObject:@"0" forKey:KEY_CHECK_MODE];
+       [ud synchronize];
        self->buttonExec.enabled = false;
      }]];
 

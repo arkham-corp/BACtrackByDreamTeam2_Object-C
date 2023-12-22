@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CompanyViewController.h"
 #import "AgreementViewController.h"
+#import "Reachability.h"
 
 @interface MainViewController : UIViewController
 {

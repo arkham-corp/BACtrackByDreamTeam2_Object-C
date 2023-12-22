@@ -27,6 +27,8 @@
     IBOutlet UILabel *mBatteryLabel;
     IBOutlet UILabel *mBatteryLabel2;
     IBOutlet UILabel *mReadingLabel;
+    IBOutlet UIProgressView *mProgressView;
+
 }
 
 @property (nonatomic, retain) id <BacTrackAPIDelegate> delegate;

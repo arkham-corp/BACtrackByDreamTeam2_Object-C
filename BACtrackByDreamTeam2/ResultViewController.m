@@ -33,7 +33,7 @@ int retryCount = 0;
     
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
 //20231214
-    NSString *status = [ud stringForKey:KEY_CONECTION_STATUS];
+    NSString *status = [ud stringForKey:KEY_CHECK_MODE];
 
     if([status isEqual:(@"0")]) {
         [self setTitle:@"測定結果"];
@@ -110,7 +110,9 @@ int retryCount = 0;
     
 //20231214
     if([status isEqual:(@"0")]) {
+        
         [self sendData];
+        
     } else {
         [ud setObject:@"0" forKey:KEY_SEND_FLG];
         [ud synchronize];

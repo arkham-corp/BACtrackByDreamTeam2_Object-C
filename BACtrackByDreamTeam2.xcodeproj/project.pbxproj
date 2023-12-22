@@ -14,6 +14,8 @@
 		BF322D512B2BF37A005E350D /* RealmLocalDataAlcoholResult.m in Sources */ = {isa = PBXBuildFile; fileRef = BF322D502B2BF37A005E350D /* RealmLocalDataAlcoholResult.m */; };
 		BF322D532B2C62E4005E350D /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF322D522B2C62E4005E350D /* EventKit.framework */; };
 		BF322D552B2C62F3005E350D /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF322D542B2C62F3005E350D /* EventKitUI.framework */; };
+		BFF10A652B3B96CF00C6A4B1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BFF10A642B3B96CF00C6A4B1 /* Reachability.m */; };
+		BFF10A672B3B971600C6A4B1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFF10A662B3B971600C6A4B1 /* SystemConfiguration.framework */; };
 		F34BA3F22B19AE9C0037F55B /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = F34BA3F12B19AE9C0037F55B /* delete.png */; };
 		F360D1352B14584A0085866A /* DrivingReportEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F360D1332B14584A0085866A /* DrivingReportEditViewController.m */; };
 		F360D1362B14584A0085866A /* DrivingReportEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F360D1342B14584A0085866A /* DrivingReportEditViewController.xib */; };
@@ -101,6 +103,9 @@
 		BF322D502B2BF37A005E350D /* RealmLocalDataAlcoholResult.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RealmLocalDataAlcoholResult.m; sourceTree = "<group>"; };
 		BF322D522B2C62E4005E350D /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		BF322D542B2C62F3005E350D /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
+		BFF10A632B3B96CF00C6A4B1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		BFF10A642B3B96CF00C6A4B1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		BFF10A662B3B971600C6A4B1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		F31247ED2AF888C50015746D /* RealmLocalDataDrivingReportDestination.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RealmLocalDataDrivingReportDestination.h; sourceTree = "<group>"; };
 		F31247EE2AF888E00015746D /* RealmLocalDataDrivingReportDetail.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RealmLocalDataDrivingReportDetail.h; sourceTree = "<group>"; };
 		F34BA3F12B19AE9C0037F55B /* delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = delete.png; sourceTree = "<group>"; };
@@ -195,6 +200,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF322D552B2C62F3005E350D /* EventKitUI.framework in Frameworks */,
+				BFF10A672B3B971600C6A4B1 /* SystemConfiguration.framework in Frameworks */,
 				F3A014AB2B04AA9000703D8B /* Realm in Frameworks */,
 				BF322D532B2C62E4005E350D /* EventKit.framework in Frameworks */,
 				F374625227BE19EA0047F6BF /* libBACtrackSDK.a in Frameworks */,
@@ -252,6 +258,8 @@
 		F368C4E827BE164600AE8A0A /* BACtrackByDreamTeam2 */ = {
 			isa = PBXGroup;
 			children = (
+				BFF10A632B3B96CF00C6A4B1 /* Reachability.h */,
+				BFF10A642B3B96CF00C6A4B1 /* Reachability.m */,
 				F374621F27BE18E00047F6BF /* AgreementViewController.h */,
 				F374621D27BE18E00047F6BF /* AgreementViewController.m */,
 				F374621E27BE18E00047F6BF /* AgreementViewController.xib */,
@@ -360,6 +368,7 @@
 		F374625027BE19EA0047F6BF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BFF10A662B3B971600C6A4B1 /* SystemConfiguration.framework */,
 				BF322D542B2C62F3005E350D /* EventKitUI.framework */,
 				BF322D522B2C62E4005E350D /* EventKit.framework */,
 				BF0E71012B2854E2005F6308 /* CoreAudioTypes.framework */,
@@ -540,6 +549,7 @@
 				F3A3E0F32B1D64DA00152D35 /* DrivingReportDetailViewController.m in Sources */,
 				F3A268F62ADE06680095CF1C /* DrivingReportViewController.m in Sources */,
 				F3D73C9328B37D3D00224F40 /* DrivingDivViewController.m in Sources */,
+				BFF10A652B3B96CF00C6A4B1 /* Reachability.m in Sources */,
 				F360D1352B14584A0085866A /* DrivingReportEditViewController.m in Sources */,
 				F374623827BE197C0047F6BF /* CompanyViewController.m in Sources */,
 				F374624A27BE19970047F6BF /* MainViewController.m in Sources */,
@@ -721,11 +731,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2.0.0;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3YN5PSA7X5;
+				DEVELOPMENT_TEAM = 3YN5PSA7X5;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -751,11 +759,10 @@
 				);
 				MARKETING_VERSION = 2.0.0;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "-Wl,-ld_classic";
 				PRODUCT_BUNDLE_IDENTIFIER = "dream-team.co.jp.bactrack2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Wildcard_Development;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -768,11 +775,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2.0.0;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3YN5PSA7X5;
+				DEVELOPMENT_TEAM = 3YN5PSA7X5;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -798,11 +803,10 @@
 				);
 				MARKETING_VERSION = 2.0.0;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = "-Wl,-ld_classic";
 				PRODUCT_BUNDLE_IDENTIFIER = "dream-team.co.jp.bactrack2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Wildcard_Development;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

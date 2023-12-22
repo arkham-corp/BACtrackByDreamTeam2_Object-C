@@ -46,6 +46,11 @@
     } else {
         [self setTitle:@"測定（無通信モード）"];
     }
+    
+    mProgressView.hidden = false;
+    mProgressView.progressTintColor = [UIColor orangeColor];
+    [mProgressView setProgress:0.0];
+
 //20231214
     
     mReadingLabel.text = @"";
@@ -323,12 +328,18 @@
     else
     {
 //20231211
+
         float i = [number doubleValue];
         if(i > 10) {
             i = 10;
         }
-        NSString *str1 = @"準備中 ";
-        NSString *str = [NSString stringWithFormat:@"%@%.0f",str1,i];
+        float progress = fabs(((i-10)*-1)/10);
+        NSLog(@"%@", [NSString stringWithFormat: @"%.2f", progress] );
+
+        [mProgressView setProgress:progress + 0.1 animated:YES];
+
+        NSString *str = @"準備中 ";
+//        NSString *str = [NSString stringWithFormat:@"%@%.0f",str1,i];
         mReadingLabel.text = str;
 //        mReadingLabel.text = @"準備中";
 //20231211
@@ -338,6 +349,11 @@
 // Tell the user to start
 - (void)BacTrackStart
 {
+    mProgressView.hidden = true;
+    [mProgressView setProgress:0.0];
+    mProgressView.progressTintColor = [UIColor blueColor];
+    mProgressView.hidden = false;
+
     mTakePhoto = 0;
     mReadingLabel.text = @"息を吐いてください!";
 }
@@ -359,10 +375,16 @@
 -(void)BacTrackBlow:(NSNumber*)breathFractionRemaining
 {
 //20231211
-    float i = [breathFractionRemaining doubleValue]*10;
-    NSString *str1 = @"息を吐き続けてください! ";
-    NSString *str = [NSString stringWithFormat:@"%@%.0f",str1,i];
-    mReadingLabel.text = str;
+    float i = [breathFractionRemaining doubleValue];
+    if(i > 1) {
+        i = 1;
+    }
+    float progress = fabs(((i-1)*-1));
+    [mProgressView setProgress:progress + 0.1 animated:YES];
+    NSLog(@"%@", [NSString stringWithFormat: @"%.2f", progress] );
+    
+    //NSString *str = @"息を吐き続けてください! ";
+    mReadingLabel.text = [NSString stringWithFormat: @"息を吐き続けてください! %.f ％", progress*100] ;
  //    mReadingLabel.text = @"息を吐き続けてください!";
 //20231211
     if (mUseCamera == 1 && mTakePhoto == 0)
@@ -374,6 +396,7 @@
 
 - (void)BacTrackAnalyzing
 {
+    mProgressView.hidden = true;
     mReadingLabel.text = @"解析中";
 }
 

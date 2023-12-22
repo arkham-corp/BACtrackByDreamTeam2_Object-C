@@ -811,9 +811,9 @@
         [self presentViewController:alert animated:YES completion:nil];
         
         NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-        [ud setObject:@"1" forKey:KEY_SEND_FLG];
+        [ud setObject:@"2" forKey:KEY_SEND_FLG];
         [ud synchronize];
-        [self changeSendFlgToNG];
+        [self changeSendFlg];
         buttonSend.enabled = false;
     }
     else if ([trim isEqualToString:@"DRIVER_NG"])

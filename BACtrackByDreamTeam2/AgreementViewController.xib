@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AgreementViewController">
+            <connections>
+                <outlet property="buttonAgree" destination="prY-jT-dmP" id="Lzq-Tg-BbL"/>
+                <outlet property="buttonNotAgree" destination="MBo-vg-tJU" id="Vkt-GT-y0J"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="prY-jT-dmP" customClass="MyButton">
+                    <rect key="frame" x="10" y="838" width="181" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <state key="normal" title="同意する"/>
+                    <connections>
+                        <action selector="btnTouchUpInsideAgree:" destination="-1" eventType="touchUpInside" id="rex-sP-cBi"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MBo-vg-tJU" customClass="MyButton">
+                    <rect key="frame" x="215" y="838" width="194" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <state key="normal" title="同意しない"/>
+                    <connections>
+                        <action selector="btnTouchUpInsideNotAgree:" destination="-1" eventType="touchUpInside" id="16d-qD-Xg2"/>
+                    </connections>
+                </button>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rj6-mm-qI6">
+                    <rect key="frame" x="8" y="8" width="388" height="764"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <string key="text">アプリケーション利用規約
+
+この利用規約（以下「本規約」）は、有限会社ドリームチーム（以下「当社」）が提供するスマートフォン向けアプリ（以下「本アプリ」）をダウンロード、インストール、又は利用するに当たっての利用者（以下「利用者」）の権利と義務が規定されています。本アプリを利用される場合は、事前に本規約に規定する全ての条件に同意していただきます。本規格に同意していただけない場合、本アプリをご利用いただくことはできません。
+
+第1条（同意）
+1  利用者は、本アプリのインストール時に画面上に表示される「同意する」ボタンを押した時点で、本規約の全ての条件に同意したものとみなされます。
+
+第2条（本アプリの使用許諾）
+1　当社は、利用者に対し、本規約に定める条件に従い、本アプリの譲渡不能かつ非独占的な日本国内における使用権を無償で許諾します。なお、本規約は、将来開発される本アプリの仕様変更等に対する使用許諾を認めるものではありません。
+2　当社は、本規約において明示的に許諾する事項を除き、いかなる権利も利用者に対して付与するものではありません。
+
+第3条（環境）
+1　本アプリのダウンロート時及び本アプリを利用中にデータ通信費用が発生した場合は、利用者が自らの費用を負担するものとします。
+
+第4条（留意事項・禁止事項等）
+1　利用者は、本アプリを個人もしくは、定められた使用の目的のためにのみ使用することができるものとします。
+2　利用者は、以下の行為を行ってはならないものとします。
+(1) 個人使用目的のために本アプリをインストールする場合を除き、本アプリの一部又は全部を複製する行為
+(2) 本アプリを修正、変更、逆アセンブル、逆コンパイル、リバースエンジニアリング等の改変する行為
+(3) 本アプリ及びその使用権を第三者に販売・貸与・譲渡・配布、又は再許諾権の設定若しくは担保に供する行為
+(4) 当社又は第三者の知的財産権を含む法的権利を侵害する行為
+(5) 本アプリの提供に支障をきたす行為
+(6) 公序良俗に反する行為その他法令に違反する行為
+(7) 本規約に違反する行為その他当社が不適当と判断する行為
+(8) 本アプリが予定している利用目的と異なる目的で本アプリを利用する行為
+(9) その他、当社が不適切と判断する行為
+
+3　利用者が本規約に違反し、当社が損害を被った場合、その損害の全部又は一部を利用者に負担していただくことがあります。
+4　本アプリを利用者端末から削除した場合、再度本アプリをインストールしても、本アクセスに係わる削除前のデータ(前回値等)は利用できない場合があります。
+
+第5条（知的財産権）
+1　本アプリに関する著作権、商標権、特許権、意匠権、ノウハウその他一切の知的財産権は、全て当社又は正当な権限を有する第三者に帰属します。
+
+第6条（免責事項等）
+1　当社は、利用者、その他の第三者が本アプリの利用に関連して直接、間接に被ったいかなる損害に対しても、賠償等の責任を負わないものとします。
+2　当社は、本アプリ利用者に対し、本アプリの動作保証、使用目的への適合性の保証、使用結果についての的確性や信頼性の保証、第三者の権利侵害又は瑕疵担保責任も含め、いかなる責任も負いません。
+3　当社は、独自の判断に基づき、本アプリの仕様の変更又は修正、配布方法等の変更、使用許諾の中止をすることができます。その結果、利用者に損害が生じた場合でも、当社は一切責任を負いません。
+
+第7条（本アプリ使用上の注意事項）
+1　当社は、本アプリと他のソフトウェアとの互換性について何ら保証いたしません。
+2　本アプリは、利用者の使用環境により使用できない場合（一部機能を使用できない場合を含む）があります。また、当社の責によらない事由（利用者が使用する通信機器、ソフトウェア等の障害又はインターネット回線の不通等の障害等、OSのアップデート）により生じた損害については、当社は責任を負いません。
+3　利用者が本アプリを使用可能なAndroid/iOS搭載機器・対象OS(以下「対応端末」)は当社指定するものに限ります。利用者が使用する対応端末は利用者の費用と責任において準備するものとします。
+
+第8条（規約変更）
+1　当社は、利用者の承諾及び利用者への通知なしに、いつでも本規約の一部又は全部を改定できるものとします。なお、本規約の変更後に本アプリを利用した場合は、変更後の本規約に同意したものとみなします。
+
+第9条（準拠法及び裁判管轄）
+1　本規約の効力、解釈及び履行については日本国法に準拠するものとします。
+2　本規約に関する利用者と当社の間の紛争については、東京地方裁判所を第一審の専属の合意管轄裁判所とします。
+
+発行日　2020年12月22日</string>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <point key="canvasLocation" x="-210.1449275362319" y="293.30357142857139"/>
+        </view>
+    </objects>
+</document>

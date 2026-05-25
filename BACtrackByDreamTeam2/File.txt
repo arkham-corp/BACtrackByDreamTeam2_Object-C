@@ -1,0 +1,10 @@
+    NSLog(@"buttonExec: %@", buttonExec);
+    NSLog(@"buttonExec superview: %@", buttonExec.superview);
+    
+    // ボタン全体を探す
+    for (UIView *view in self.view.subviews) {
+        if ([view isKindOfClass:[UIButton class]]) {
+            UIButton *btn = (UIButton *)view;
+            NSLog(@"Found button: %@ enabled=%d tag=%ld", btn, btn.enabled, (long)btn.tag);
+        }
+    }

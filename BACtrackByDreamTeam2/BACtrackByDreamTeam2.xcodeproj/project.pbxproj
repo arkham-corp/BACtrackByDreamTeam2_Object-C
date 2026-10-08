@@ -11,9 +11,10 @@
 		AF91CB357B005439FC552AFA /* Pods_BACtrackByDreamTeam2_BACtrackByDreamTeam2UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5D0556165B104C2D73060F1 /* Pods_BACtrackByDreamTeam2_BACtrackByDreamTeam2UITests.framework */; };
 		BF2D59F72B2B2957000D26B2 /* SendListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2D59F62B2B2957000D26B2 /* SendListViewCell.m */; };
 		BF2D59F92B2B2975000D26B2 /* SendListViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF2D59F82B2B2975000D26B2 /* SendListViewCell.xib */; };
-		BF322D4C2B2BED78005E350D /* TransmissionContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF322D4B2B2BED78005E350D /* TransmissionContentView.m */; };
-		BF322D4E2B2BED98005E350D /* TransmissionContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF322D4D2B2BED98005E350D /* TransmissionContentView.xib */; };
 		BF322D512B2BF37A005E350D /* RealmLocalDataAlcoholResult.m in Sources */ = {isa = PBXBuildFile; fileRef = BF322D502B2BF37A005E350D /* RealmLocalDataAlcoholResult.m */; };
+		BFA6D8172FC562C600BC60D3 /* TransmissionContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFA6D8162FC562C600BC60D3 /* TransmissionContentView.xib */; };
+		BFA6D8182FC562C600BC60D3 /* TransmissionContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = BFA6D8152FC562C600BC60D3 /* TransmissionContentView.m */; };
+		BFA6D81C2FC5640400BC60D3 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BFA6D81B2FC5640400BC60D3 /* SceneDelegate.m */; };
 		F34BA3F22B19AE9C0037F55B /* delete.png in Resources */ = {isa = PBXBuildFile; fileRef = F34BA3F12B19AE9C0037F55B /* delete.png */; };
 		F360D1352B14584A0085866A /* DrivingReportEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F360D1332B14584A0085866A /* DrivingReportEditViewController.m */; };
 		F360D1362B14584A0085866A /* DrivingReportEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F360D1342B14584A0085866A /* DrivingReportEditViewController.xib */; };
@@ -65,11 +66,13 @@
 		F3A651CA2B20117B0089E30C /* DrivingReportDestinationViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3A651C82B20117B0089E30C /* DrivingReportDestinationViewCell.xib */; };
 		F3AD8E3D2C340B6E001EEDA8 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F3AD8E3C2C340B6E001EEDA8 /* RealmSwift */; };
 		F3AD8E3E2C340B6E001EEDA8 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = F3AD8E3C2C340B6E001EEDA8 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		F3B625092E7ABB0B00F55E05 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F3B625082E7ABB0800F55E05 /* SceneDelegate.m */; };
 		F3B870A92AFDBC4E00CB48DF /* DrivingReportViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F3B870A72AFDBC4E00CB48DF /* DrivingReportViewCell.m */; };
 		F3B870AA2AFDBC4E00CB48DF /* DrivingReportViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3B870A82AFDBC4E00CB48DF /* DrivingReportViewCell.xib */; };
 		F3D73C9328B37D3D00224F40 /* DrivingDivViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D73C9228B37D3D00224F40 /* DrivingDivViewController.m */; };
 		F3D73C9528B3802B00224F40 /* DrivingDivViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3D73C9428B3802B00224F40 /* DrivingDivViewController.xib */; };
+		F3D847E02FBC303100F8AD9F /* FaceRecognitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D847DE2FBC303100F8AD9F /* FaceRecognitionViewController.m */; };
+		F3D847E12FBC303100F8AD9F /* FaceRecognitionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F3D847DF2FBC303100F8AD9F /* FaceRecognitionViewController.xib */; };
+		F3D847E82FBC33E500F8AD9F /* CameraManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F3D847E72FBC33E500F8AD9F /* CameraManager.m */; };
 		F3D97F4F2C16EFDA00339FD7 /* Pods_BACtrackByDreamTeam2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52A19601CCF6C63B220FCD24 /* Pods_BACtrackByDreamTeam2.framework */; };
 		F3D97F512C16EFF300339FD7 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFF10A662B3B971600C6A4B1 /* SystemConfiguration.framework */; };
 		F3D97F532C16EFF400339FD7 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF322D542B2C62F3005E350D /* EventKitUI.framework */; };
@@ -120,13 +123,15 @@
 		BF2D59F52B2B2936000D26B2 /* SendListViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SendListViewCell.h; sourceTree = "<group>"; };
 		BF2D59F62B2B2957000D26B2 /* SendListViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SendListViewCell.m; sourceTree = "<group>"; };
 		BF2D59F82B2B2975000D26B2 /* SendListViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SendListViewCell.xib; sourceTree = "<group>"; };
-		BF322D4A2B2BED55005E350D /* TransmissionContentView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransmissionContentView.h; sourceTree = "<group>"; };
-		BF322D4B2B2BED78005E350D /* TransmissionContentView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TransmissionContentView.m; sourceTree = "<group>"; };
-		BF322D4D2B2BED98005E350D /* TransmissionContentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransmissionContentView.xib; sourceTree = "<group>"; };
 		BF322D4F2B2BF367005E350D /* RealmLocalDataAlcoholResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RealmLocalDataAlcoholResult.h; sourceTree = "<group>"; };
 		BF322D502B2BF37A005E350D /* RealmLocalDataAlcoholResult.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RealmLocalDataAlcoholResult.m; sourceTree = "<group>"; };
 		BF322D522B2C62E4005E350D /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		BF322D542B2C62F3005E350D /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
+		BFA6D8152FC562C600BC60D3 /* TransmissionContentView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TransmissionContentView.m; sourceTree = "<group>"; };
+		BFA6D8162FC562C600BC60D3 /* TransmissionContentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransmissionContentView.xib; sourceTree = "<group>"; };
+		BFA6D8192FC5632D00BC60D3 /* TransmissionContentView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TransmissionContentView.h; sourceTree = "<group>"; };
+		BFA6D81A2FC5640400BC60D3 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		BFA6D81B2FC5640400BC60D3 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		BFF10A662B3B971600C6A4B1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		D5D0556165B104C2D73060F1 /* Pods_BACtrackByDreamTeam2_BACtrackByDreamTeam2UITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BACtrackByDreamTeam2_BACtrackByDreamTeam2UITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAD6D63198374124A901FBBA /* Pods_BACtrackByDreamTeam2Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BACtrackByDreamTeam2Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -208,14 +213,17 @@
 		F3A651C62B20117B0089E30C /* DrivingReportDestinationViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrivingReportDestinationViewCell.h; sourceTree = "<group>"; };
 		F3A651C72B20117B0089E30C /* DrivingReportDestinationViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrivingReportDestinationViewCell.m; sourceTree = "<group>"; };
 		F3A651C82B20117B0089E30C /* DrivingReportDestinationViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DrivingReportDestinationViewCell.xib; sourceTree = "<group>"; };
-		F3B625072E7ABAF000F55E05 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
-		F3B625082E7ABB0800F55E05 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		F3B870A62AFDBC4E00CB48DF /* DrivingReportViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrivingReportViewCell.h; sourceTree = "<group>"; };
 		F3B870A72AFDBC4E00CB48DF /* DrivingReportViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrivingReportViewCell.m; sourceTree = "<group>"; };
 		F3B870A82AFDBC4E00CB48DF /* DrivingReportViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DrivingReportViewCell.xib; sourceTree = "<group>"; };
 		F3D73C9128B37CA300224F40 /* DrivingDivViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrivingDivViewController.h; sourceTree = "<group>"; };
 		F3D73C9228B37D3D00224F40 /* DrivingDivViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DrivingDivViewController.m; sourceTree = "<group>"; };
 		F3D73C9428B3802B00224F40 /* DrivingDivViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DrivingDivViewController.xib; sourceTree = "<group>"; };
+		F3D847DD2FBC303100F8AD9F /* FaceRecognitionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FaceRecognitionViewController.h; sourceTree = "<group>"; };
+		F3D847DE2FBC303100F8AD9F /* FaceRecognitionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FaceRecognitionViewController.m; sourceTree = "<group>"; };
+		F3D847DF2FBC303100F8AD9F /* FaceRecognitionViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FaceRecognitionViewController.xib; sourceTree = "<group>"; };
+		F3D847E62FBC33E500F8AD9F /* CameraManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraManager.h; sourceTree = "<group>"; };
+		F3D847E72FBC33E500F8AD9F /* CameraManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -298,8 +306,11 @@
 		F368C4E827BE164600AE8A0A /* BACtrackByDreamTeam2 */ = {
 			isa = PBXGroup;
 			children = (
-				F3B625072E7ABAF000F55E05 /* SceneDelegate.h */,
-				F3B625082E7ABB0800F55E05 /* SceneDelegate.m */,
+				BFA6D81A2FC5640400BC60D3 /* SceneDelegate.h */,
+				BFA6D81B2FC5640400BC60D3 /* SceneDelegate.m */,
+				BFA6D8192FC5632D00BC60D3 /* TransmissionContentView.h */,
+				BFA6D8152FC562C600BC60D3 /* TransmissionContentView.m */,
+				BFA6D8162FC562C600BC60D3 /* TransmissionContentView.xib */,
 				F374621F27BE18E00047F6BF /* AgreementViewController.h */,
 				F374621D27BE18E00047F6BF /* AgreementViewController.m */,
 				F374621E27BE18E00047F6BF /* AgreementViewController.xib */,
@@ -308,6 +319,8 @@
 				F368C4E927BE164600AE8A0A /* AppDelegate.h */,
 				F368C4EA27BE164600AE8A0A /* AppDelegate.m */,
 				F368C4F527BE165000AE8A0A /* Assets.xcassets */,
+				F3D847E62FBC33E500F8AD9F /* CameraManager.h */,
+				F3D847E72FBC33E500F8AD9F /* CameraManager.m */,
 				F374622627BE196A0047F6BF /* CarNoViewController.h */,
 				F374622827BE197C0047F6BF /* CarNoViewController.m */,
 				F374623127BE197C0047F6BF /* CarNoViewController.xib */,
@@ -344,6 +357,9 @@
 				F3A268F32ADE06680095CF1C /* DrivingReportViewController.h */,
 				F3A268F42ADE06680095CF1C /* DrivingReportViewController.m */,
 				F3A268F52ADE06680095CF1C /* DrivingReportViewController.xib */,
+				F3D847DD2FBC303100F8AD9F /* FaceRecognitionViewController.h */,
+				F3D847DE2FBC303100F8AD9F /* FaceRecognitionViewController.m */,
+				F3D847DF2FBC303100F8AD9F /* FaceRecognitionViewController.xib */,
 				F374622A27BE197C0047F6BF /* GPSViewController.h */,
 				F374622B27BE197C0047F6BF /* GPSViewController.m */,
 				F374622E27BE197C0047F6BF /* GPSViewController.xib */,
@@ -377,9 +393,6 @@
 				BF2D59F52B2B2936000D26B2 /* SendListViewCell.h */,
 				BF2D59F62B2B2957000D26B2 /* SendListViewCell.m */,
 				BF2D59F82B2B2975000D26B2 /* SendListViewCell.xib */,
-				BF322D4A2B2BED55005E350D /* TransmissionContentView.h */,
-				BF322D4B2B2BED78005E350D /* TransmissionContentView.m */,
-				BF322D4D2B2BED98005E350D /* TransmissionContentView.xib */,
 				BF322D4F2B2BF367005E350D /* RealmLocalDataAlcoholResult.h */,
 				BF322D502B2BF37A005E350D /* RealmLocalDataAlcoholResult.m */,
 			);
@@ -541,9 +554,11 @@
 				F374623527BE197C0047F6BF /* CompanyViewController.xib in Resources */,
 				F3A268FC2ADE06DB0095CF1C /* SendListViewController.xib in Resources */,
 				F368C4F627BE165000AE8A0A /* Assets.xcassets in Resources */,
+				BFA6D8172FC562C600BC60D3 /* TransmissionContentView.xib in Resources */,
 				F3B870AA2AFDBC4E00CB48DF /* DrivingReportViewCell.xib in Resources */,
 				F374624F27BE19C10047F6BF /* Default-568h@2x.png in Resources */,
 				F3D73C9528B3802B00224F40 /* DrivingDivViewController.xib in Resources */,
+				F3D847E12FBC303100F8AD9F /* FaceRecognitionViewController.xib in Resources */,
 				F374622127BE18E00047F6BF /* AgreementViewController.xib in Resources */,
 				F374623327BE197C0047F6BF /* DriverViewController.xib in Resources */,
 				F39C7D7D2ADD0D6E00885F9E /* MenuViewController.xib in Resources */,
@@ -555,7 +570,6 @@
 				F360D1362B14584A0085866A /* DrivingReportEditViewController.xib in Resources */,
 				F374624C27BE19970047F6BF /* ResultViewController.xib in Resources */,
 				F3A269012ADE06FF0095CF1C /* ReminderViewController.xib in Resources */,
-				BF322D4E2B2BED98005E350D /* TransmissionContentView.xib in Resources */,
 				F3A651CA2B20117B0089E30C /* DrivingReportDestinationViewCell.xib in Resources */,
 				F3A651C02B1FFD470089E30C /* DrivingReportDetailEditViewController.xib in Resources */,
 				BF2D59F92B2B2975000D26B2 /* SendListViewCell.xib in Resources */,
@@ -662,6 +676,7 @@
 				F368C4EB27BE164600AE8A0A /* AppDelegate.m in Sources */,
 				F3A049452B141C48008473E4 /* RealmLocalDataDrivingReportDestination.m in Sources */,
 				F3A3E0F32B1D64DA00152D35 /* DrivingReportDetailViewController.m in Sources */,
+				F3D847E02FBC303100F8AD9F /* FaceRecognitionViewController.m in Sources */,
 				F3A268F62ADE06680095CF1C /* DrivingReportViewController.m in Sources */,
 				F3D73C9328B37D3D00224F40 /* DrivingDivViewController.m in Sources */,
 				F360D1352B14584A0085866A /* DrivingReportEditViewController.m in Sources */,
@@ -672,16 +687,17 @@
 				F3A049472B141C6B008473E4 /* RealmLocalDataDrivingReportDetail.m in Sources */,
 				F374622027BE18E00047F6BF /* AgreementViewController.m in Sources */,
 				F3A268FB2ADE06DB0095CF1C /* SendListViewController.m in Sources */,
+				BFA6D8182FC562C600BC60D3 /* TransmissionContentView.m in Sources */,
 				F3A651C92B20117B0089E30C /* DrivingReportDestinationViewCell.m in Sources */,
-				BF322D4C2B2BED78005E350D /* TransmissionContentView.m in Sources */,
-				F3B625092E7ABB0B00F55E05 /* SceneDelegate.m in Sources */,
 				F374623227BE197C0047F6BF /* CarNoViewController.m in Sources */,
 				F374622427BE19340047F6BF /* AppConsts.m in Sources */,
+				F3D847E82FBC33E500F8AD9F /* CameraManager.m in Sources */,
 				F3A651BF2B1FFD470089E30C /* DrivingReportDetailEditViewController.m in Sources */,
 				F374623427BE197C0047F6BF /* GPSViewController.m in Sources */,
 				F374624627BE19970047F6BF /* MyButton.m in Sources */,
 				F39C7D7C2ADD0D6E00885F9E /* MenuViewController.m in Sources */,
 				F3A3E0F82B1D690A00152D35 /* DrivingReportDetailViewCell.m in Sources */,
+				BFA6D81C2FC5640400BC60D3 /* SceneDelegate.m in Sources */,
 				F374624D27BE19970047F6BF /* main.m in Sources */,
 				F374624927BE19970047F6BF /* ResultViewController.m in Sources */,
 			);
@@ -858,9 +874,9 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 2.5.1;
+				CURRENT_PROJECT_VERSION = 2.7.0;
 				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3YN5PSA7X5;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TNDY7A3H93;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -886,7 +902,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/lib",
 				);
-				MARKETING_VERSION = 2.6.0;
+				MARKETING_VERSION = 2.7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-Wl",
@@ -895,7 +911,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "dream-team.co.jp.bactrack2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Wildcard AdHoc";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AppStore_BACtrackByDreamTeam2;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -914,9 +930,9 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 2.5.1;
+				CURRENT_PROJECT_VERSION = 2.7.0;
 				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 3YN5PSA7X5;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = TNDY7A3H93;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
 				ENABLE_BITCODE = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -942,7 +958,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/lib",
 				);
-				MARKETING_VERSION = 2.6.0;
+				MARKETING_VERSION = 2.7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-Wl",
@@ -951,7 +967,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "dream-team.co.jp.bactrack2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Wildcard AdHoc";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = AppStore_BACtrackByDreamTeam2;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1096,8 +1112,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 20.0.4;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

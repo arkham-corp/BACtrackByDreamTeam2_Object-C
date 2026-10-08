@@ -167,6 +167,17 @@
             [self setTitle: title setfld:@"" setdiv:div setreq:@"8"];
         }
 //202404 finish
+
+        NSDate *now = [NSDate date];
+        
+        // 1. 各DatePickerの初期値を「現在日時」にする
+        [datePickerDrivingStartYmd setDate:now animated:NO];
+        [datePickerDrivingStartHm setDate:now animated:NO];
+        
+        // 2. 表示用のTextFieldにもフォーマットした文字列をセットする
+        [self updateDatePicker:datePickerDrivingStartYmd :textDrivingStartYmd];
+        [self updateTimePicker:datePickerDrivingStartHm :textDrivingStartHm];
+        // ★★★ ここまで追加 ★★★
     }
  
 }

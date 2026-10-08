@@ -9,28 +9,11 @@
 #import "InspectionViewController.h"
 #import "AppConsts.h"
 
-@interface InspectionViewController () <BacTrackAPIDelegate>
-{
-    BacTrackAPI *mBacTrack;
-    NSInteger mUseCamera;
-    NSInteger mTakePhoto;
-}
-@end
-
 @protocol MyProtocol
 - (void)getBreathalyzerSerialNumber;
 @end
 
-@interface InspectionViewController () <AVCapturePhotoCaptureDelegate>
-{
-    
-}
-
-@end
-
-@implementation InspectionViewController {
-    AVCaptureVideoDataOutput *_dataOutput;
-}
+@implementation InspectionViewController
 
 @synthesize delegate;
 
@@ -38,7 +21,6 @@
     [super viewDidLoad];
     
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-//20231214
     NSString *status = [ud stringForKey:KEY_CONECTION_STATUS];
 
     if([status isEqual:(@"0")]) {
@@ -50,19 +32,16 @@
     mProgressView.hidden = false;
     mProgressView.progressTintColor = [UIColor orangeColor];
     [mProgressView setProgress:0.0];
-
-//20231214
     
     mReadingLabel.text = @"";
     mBatteryLabel.text = @"";
     mBatteryLabel2.text = @"";
-    
     // 値取得
     tvDriver.text = [ud stringForKey:KEY_DRIVER];
     tvCarNo.text = [ud stringForKey:KEY_CAR_NO];
     tvAddress.text = [ud stringForKey:KEY_LOCATION_ADDRESS];
     
-    UIFont *font = [UIFont systemFontOfSize:18];
+    UIFont *font = [UIFont systemFontOfSize:22];
     [tvDriver setFont:font];
     [tvCarNo setFont:font];
     [tvAddress setFont:font];
@@ -75,25 +54,64 @@
     application.idleTimerDisabled = YES;
 }
 
-- (void) setupBacTrack
-{
-    // アルコールマネージャー準備
-    mReadingLabel.text = @"接続中\n10秒ほどお待ち下さい";
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
-    mBacTrack = [[BacTrackAPI alloc] initWithDelegate:self AndAPIKey:@"e10582efcaf64f7d90d947c2899b43"];
-    mBacTrack.delegate = self;
-    
-    [mBacTrack startScan];
-    [mBacTrack stopScan];
-    
-    [mBacTrack connectToNearestBreathalyzer];
+    // 1. 標準の戻るボタンを非表示にする
+    //[self.navigationItem setHidesBackButton:YES animated:NO];
+    // 2. もし左側にカスタムボタンを置いている場合も隠す（念のため）
+    //self.navigationItem.leftBarButtonItem = nil;
 }
 
-- (void) stopBacTrack
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+
+    // この画面を離れる時に、スワイプ戻り機能を有効に戻す
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+
+    // スワイプ戻りジェスチャーを無効化
+    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
+    [self setupAVCapture];
+    [self setupBacTrack];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
 {
-    [mBacTrack stopScan];
-    [mBacTrack disconnect];
-    mBacTrack = nil;
+    [self stopAVCapture];
+    [self stopBacTrack];
+
+    // デバイスのスリープタイマーを有効化します。
+    UIApplication* application = [UIApplication sharedApplication];
+    application.idleTimerDisabled = NO;
+}
+
+// 撮影完了コールバック
+- (void)cameraManagerDidCapturePhoto:(UIImage *)image {
+    NSData *data = UIImageJPEGRepresentation(image, 1.0);
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:data forKey:KEY_PHOTO];
+    [ud synchronize];
+}
+
+- (void)cameraManagerDidTimeout {
+    // InspectionViewController では使わないので空実装でOK
+}
+
+- (void)cameraManagerDidDenied {
+    UIAlertController *alert = [UIAlertController
+        alertControllerWithTitle:@"エラー"
+        message:@"カメラの利用が許可されていません。"
+        preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void) setupAVCapture
@@ -172,50 +190,29 @@
     _captureSesssion = nil;
 }
 
+- (void) setupBacTrack
+{
+    // アルコールマネージャー準備
+    mReadingLabel.text = @"接続中\n10秒ほどお待ち下さい";
+    
+    mBacTrack = [[BacTrackAPI alloc] initWithDelegate:self AndAPIKey:@"e10582efcaf64f7d90d947c2899b43"];
+    
+    [mBacTrack startScan];
+    [mBacTrack stopScan];
+    
+    [mBacTrack connectToNearestBreathalyzer];
+}
+
+- (void) stopBacTrack
+{
+    [mBacTrack stopScan];
+    [mBacTrack disconnect];
+    mBacTrack = nil;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [self setupBacTrack];
-    [self setupAVCapture];
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-    
-}
-
--(void)viewWillDisappear:(BOOL)animated
-{
-    
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [self stopBacTrack];
-    [self stopAVCapture];
-    
-    // デバイスのスリープタイマーを有効化します。
-    UIApplication* application = [UIApplication sharedApplication];
-    application.idleTimerDisabled = NO;
-}
-
-- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
-    imageView.image = [self imageFromSampleBufferRef:sampleBuffer];
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 /***** BacTrack Callback *****/
 
@@ -317,7 +314,6 @@
     }
 }
 
-// Initialized countdown from number
 -(void)BacTrackCountdown:(NSNumber *)number executionFailure:(BOOL)failure
 {
     if (failure)
@@ -327,7 +323,6 @@
     }
     else
     {
-//20231211
 
         float i = [number doubleValue];
         if(i > 10) {
@@ -337,12 +332,8 @@
         NSLog(@"%@", [NSString stringWithFormat: @"%.2f", progress] );
 
         [mProgressView setProgress:progress + 0.1 animated:YES];
-
         NSString *str = @"準備中 ";
-//        NSString *str = [NSString stringWithFormat:@"%@%.0f",str1,i];
         mReadingLabel.text = str;
-//        mReadingLabel.text = @"準備中";
-//20231211
     }
 }
 
@@ -358,23 +349,9 @@
     mReadingLabel.text = @"息を吐いてください!";
 }
 
-// Tell the user to blow
-/*
-- (void)BacTrackBlow
-{
-    mReadingLabel.text = @"息を吐き続けてください!";
-    
-    if (mUseCamera == 1 && mTakePhoto == 0)
-    {
-        mTakePhoto = 1;
-        [self willTakePhoto];
-    }
-}
-*/
-
 -(void)BacTrackBlow:(NSNumber*)breathFractionRemaining
 {
-//20231211
+
     float i = [breathFractionRemaining doubleValue];
     if(i > 1) {
         i = 1;
@@ -383,165 +360,12 @@
     [mProgressView setProgress:progress + 0.1 animated:YES];
     NSLog(@"%@", [NSString stringWithFormat: @"%.2f", progress] );
     
-    //NSString *str = @"息を吐き続けてください! ";
     mReadingLabel.text = [NSString stringWithFormat: @"息を吐き続けてください! %.f ％", progress*100] ;
- //    mReadingLabel.text = @"息を吐き続けてください!";
-//20231211
-    if (mUseCamera == 1 && mTakePhoto == 0)
+    if (mTakePhoto == 0)
     {
         mTakePhoto = 1;
         [self willTakePhoto];
     }
-}
-
-- (void)BacTrackAnalyzing
-{
-    mProgressView.hidden = true;
-    mReadingLabel.text = @"解析中";
-}
-
-
--(void)BacTrackResults:(CGFloat)bac
-{
-    //mReadingLabel.text = @"Your Result";
-    //mResultLabel.text = [NSString stringWithFormat: @"%.2f", bac];
-        
-    // 現在日時
-    NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    df.dateFormat  = @"yyyy/MM/dd HH:mm:ss";
-    NSString *inspection_time = [df stringFromDate:[NSDate date]];
-    
-    // 値保存
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    [ud setObject:[NSString stringWithFormat: @"%.3f", bac] forKey:KEY_ALCOHOL_VALUE];
-    [ud setObject:inspection_time forKey:KEY_INSPECTION_TIME];
-    [ud synchronize];
-    
-    // 停止
-    [self stopBacTrack];
-    [self stopAVCapture];
-    
-    // 移動
-    resultViewController = [[ResultViewController alloc] initWithNibName:@"ResultViewController" bundle:nil];
-    [self.navigationController pushViewController:resultViewController animated:YES];
-}
-
--(void)BacTrackConnected:(BACtrackDeviceType)device
-{
-    NSLog(@"Connected to BACtrack device");
-    
-    [mBacTrack performSelector:@selector(getBreathalyzerSerialNumber)];
-    [mBacTrack getBreathalyzerBatteryLevel];
-    [mBacTrack startCountdown];
-}
-
--(void)BacTrackDisconnected
-{
-    mReadingLabel.text = @"切断されました";
-    
-    /*
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Disconnected"
-                                                 message:@"You are now disconnected from your BACtrack device"
-                                                delegate:nil
-                                       cancelButtonTitle:@"OK"
-                                       otherButtonTitles:nil];
-    [av show];
-     */
-}
-
--(void)BacTrackConnectTimeout
-{
-    //Callback for device connection timeout; can use method to reset UI etc
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"エラー"
-                                                                             message:@"接続時間切れ"
-                                                                             preferredStyle:UIAlertControllerStyleAlert];
-   //下記のコードでボタンを追加します。また{}内に記述された処理がボタン押下時の処理なります。
-   [alertController addAction:[UIAlertAction actionWithTitle:@"OK"
-                                                       style:UIAlertActionStyleDefault
-                                                     handler:^(UIAlertAction *action)
-   {
-       //ボタンがタップされた際の処理
-   }]];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
-}
-
--(NSTimeInterval)BacTrackGetTimeout
-{
-    //Optional, sets a callback timeout timer (in seconds)
-    return 10;
-}
-
--(void)BacTrackFoundBreathalyzer:(Breathalyzer*)breathalyzer
-{
-    //Can use to store/record device id, breathalyzer type, etc.
-    //Here I've just listed the breathalyzer type
-    NSLog(@"BacTrackFoundBreathalyzer: %@", breathalyzer.uuid);
-    // 値保存
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    [ud setObject:breathalyzer.uuid forKey:KEY_BREATHALYZER_UUID];
-    [ud synchronize];
-}
-
-- (void) BacTrackSerial:(NSString *)serial_hex
-{
-    // 値保存 取得できたらUUIDを上書き
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    [ud setObject:serial_hex forKey:KEY_BREATHALYZER_UUID];
-    [ud synchronize];
-    
-    NSLog(@"BacTrackSerial: %@", serial_hex);
-}
-
--(void)BacTrackUseCount:(NSNumber*)number
-{
-    NSLog(@"Use count:, %d", number.intValue);
-
-    // 値保存 取得できたらUUIDを上書き
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    [ud setObject:[NSString stringWithFormat: @"%d", number.intValue] forKey:KEY_BREATHALYZER_USE_COUNT];
-    [ud synchronize];
-}
-
-- (void) BacTrackBatteryVoltage:(NSNumber *)number
-{
-    NSLog(@"Battery Voltage: %f", [number floatValue]);
-}
-
-- (void) BacTrackBatteryLevel:(NSNumber *)number
-{
-    NSLog(@"Battery Level: %d", [number intValue]);
-    // 値保存
-    NSString *str_battery_label = @"";
-    NSString *str_battery_label2 = @"";
-    
-    int battery_level = [number intValue];
-    if (battery_level == 0)
-    {
-        str_battery_label = @"電池残量：少";
-        str_battery_label2 = @"充電してください";
-        [mBatteryLabel2 setTextColor:[UIColor systemRedColor]];
-    }
-    else if (battery_level < 3)
-    {
-        str_battery_label = @"電池残量：中";
-        str_battery_label2 = @"";
-        [mBatteryLabel2 setTextColor:[UIColor orangeColor]];
-    }
-    else
-    {
-        str_battery_label = @"電池残量：多";
-        str_battery_label2 = @"";
-        [mBatteryLabel2 setTextColor:[UIColor whiteColor]];
-    }
-    
-    mBatteryLabel.text = str_battery_label;
-    mBatteryLabel2.text = str_battery_label2;
-}
-
--(void)BacTrackFirmwareVersion:(NSString*)version
-{
-    NSLog(@"%@", version);
 }
 
 - (void)willTakePhoto {
@@ -570,7 +394,19 @@
     CGColorSpaceRef colorSpace;
     CGContextRef    cgContext;
     colorSpace = CGColorSpaceCreateDeviceRGB();
-    cgContext = CGBitmapContextCreate(base, width, height, 8, bytesPerRow, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst);
+    CGBitmapInfo bitmapInfo =
+        kCGBitmapByteOrder32Little |
+        (CGBitmapInfo)kCGImageAlphaPremultipliedFirst;
+
+    cgContext = CGBitmapContextCreate(
+        base,
+        width,
+        height,
+        8,
+        bytesPerRow,
+        colorSpace,
+        bitmapInfo
+    );
     CGColorSpaceRelease(colorSpace);
     
     CGImageRef  cgImage;
@@ -638,6 +474,138 @@ static AVCaptureVideoOrientation videoOrientationFromDeviceOrientation(UIDeviceO
             break;
     }
     return orientation;
+}
+
+- (void)BacTrackAnalyzing
+{
+    mProgressView.hidden = true;
+    mReadingLabel.text = @"解析中";
+}
+
+
+-(void)BacTrackResults:(CGFloat)bac
+{
+    // 現在日時
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    df.dateFormat  = @"yyyy/MM/dd HH:mm:ss";
+    NSString *inspection_time = [df stringFromDate:[NSDate date]];
+    
+    // 値保存
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:[NSString stringWithFormat: @"%.3f", bac] forKey:KEY_ALCOHOL_VALUE];
+    [ud setObject:inspection_time forKey:KEY_INSPECTION_TIME];
+    [ud synchronize];
+    
+    // 停止
+    [self stopAVCapture];
+    [self stopBacTrack];
+    
+    // 移動
+    resultViewController = [[ResultViewController alloc] initWithNibName:@"ResultViewController" bundle:nil];
+    [self.navigationController pushViewController:resultViewController animated:YES];
+}
+
+-(void)BacTrackConnected:(BACtrackDeviceType)device
+{
+    NSLog(@"Connected to BACtrack device");
+    
+    [mBacTrack performSelector:@selector(getBreathalyzerSerialNumber)];
+    [mBacTrack getBreathalyzerBatteryLevel];
+    [mBacTrack startCountdown];
+}
+
+-(void)BacTrackDisconnected
+{
+    mReadingLabel.text = @"切断されました";
+}
+
+-(void)BacTrackConnectTimeout
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"エラー"
+                                                                             message:@"接続時間切れ"
+                                                                             preferredStyle:UIAlertControllerStyleAlert];
+   [alertController addAction:[UIAlertAction actionWithTitle:@"OK"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction *action)
+   {
+   }]];
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(NSTimeInterval)BacTrackGetTimeout
+{
+    return 10;
+}
+
+-(void)BacTrackFoundBreathalyzer:(Breathalyzer*)breathalyzer
+{
+    NSLog(@"BacTrackFoundBreathalyzer: %@", breathalyzer.uuid);
+    // 値保存
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:breathalyzer.uuid forKey:KEY_BREATHALYZER_UUID];
+    [ud synchronize];
+}
+
+- (void) BacTrackSerial:(NSString *)serial_hex
+{
+    // 値保存 取得できたらUUIDを上書き
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:serial_hex forKey:KEY_BREATHALYZER_UUID];
+    [ud synchronize];
+    
+    NSLog(@"BacTrackSerial: %@", serial_hex);
+}
+
+-(void)BacTrackUseCount:(NSNumber*)number
+{
+    NSLog(@"Use count:, %d", number.intValue);
+
+    // 値保存 取得できたらUUIDを上書き
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    [ud setObject:[NSString stringWithFormat: @"%d", number.intValue] forKey:KEY_BREATHALYZER_USE_COUNT];
+    [ud synchronize];
+}
+
+- (void) BacTrackBatteryVoltage:(NSNumber *)number
+{
+    NSLog(@"Battery Voltage: %f", [number floatValue]);
+}
+
+- (void) BacTrackBatteryLevel:(NSNumber *)number
+{
+    NSLog(@"Battery Level: %d", [number intValue]);
+    // 値保存
+    NSString *str_battery_label = @"";
+    NSString *str_battery_label2 = @"";
+    
+    int battery_level = [number intValue];
+    if (battery_level == 0)
+    {
+        str_battery_label = @"電池残量：少";
+        str_battery_label2 = @"充電してください";
+        [mBatteryLabel2 setTextColor:[UIColor systemRedColor]];
+    }
+    else if (battery_level < 3)
+    {
+        str_battery_label = @"電池残量：中";
+        str_battery_label2 = @"";
+        [mBatteryLabel2 setTextColor:[UIColor orangeColor]];
+    }
+    else
+    {
+        str_battery_label = @"電池残量：多";
+        str_battery_label2 = @"";
+        [mBatteryLabel2 setTextColor:[UIColor whiteColor]];
+    }
+    
+    mBatteryLabel.text = str_battery_label;
+    mBatteryLabel2.text = str_battery_label2;
+}
+
+-(void)BacTrackFirmwareVersion:(NSString*)version
+{
+    NSLog(@"%@", version);
 }
 
 @end

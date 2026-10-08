@@ -21,7 +21,6 @@
     [super viewDidLoad];
     
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-//20231214
     NSString *status = [ud stringForKey:KEY_CHECK_MODE];
 
     if([status isEqual:(@"0")]) {
@@ -29,10 +28,7 @@
     } else {
         [self setTitle:@"車番（無通信モード）"];
     }
-//20231214
-    
     buttonExec.exclusiveTouch = true;
-    
     numberTextField.delegate = self;
     
     // 前回値取得
@@ -43,21 +39,6 @@
 {
     buttonExec.enabled = true;
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {

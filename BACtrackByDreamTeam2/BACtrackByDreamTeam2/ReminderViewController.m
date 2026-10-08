@@ -16,6 +16,7 @@
 
 @implementation ReminderViewController
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -25,11 +26,20 @@
     [self createStartHmPicker];
     
     NSDate *now = [NSDate date];
+
+    // 1. 各DatePickerの初期値（ドラムロールの初期位置）をシステム日時に設定
+    [datePickerStartYmd setDate:now animated:NO];
+    [datePickerStartHm setDate:now animated:NO];
+    
+    // 2. 年月日のテキストフィールドに初期値を設定（既存処理）
     NSDateFormatter *df =[[NSDateFormatter alloc] init];
-    [df setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"ja_JP"]]; // Localeの指定
+    [df setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"ja_JP"]];
     [df setDateFormat:@"yyyy/MM/dd"];
     NSString *strDate = [df stringFromDate:now];
     textStartYmd.text = strDate;
+    
+    // 3. 時分のテキストフィールドにも現在のシステム時分を初期設定
+    [self updateTimePicker:datePickerStartHm :textStartHm];
     
     if([EKEventStore authorizationStatusForEntityType:EKEntityTypeReminder] == EKAuthorizationStatusAuthorized) {
         // リマインダーにアクセスできる場合
@@ -275,14 +285,6 @@
     }
     self->buttonExec.enabled = true;
 }
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

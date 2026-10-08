@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BACtrack.h"
 
 @interface AgreementViewController : UIViewController
 
@@ -17,6 +16,6 @@
 - (IBAction)btnTouchUpInsideAgree:(id)sender;
 - (IBAction)btnTouchUpInsideNotAgree:(id)sender;
 
-@property (nonatomic, retain) id <BacTrackAPIDelegate> delegate;
+@property (nonatomic, copy) void (^completionHandler)(BOOL agreed);
 
 @end

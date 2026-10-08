@@ -24,7 +24,7 @@
     
     // 通信状態によってタイトル変更
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    NSString *status = [ud stringForKey:KEY_CONECTION_STATUS];
+    NSString *status = [ud stringForKey:KEY_CHECK_MODE];
     if ([status isEqual:@"0"]) {
         [self setTitle:@"位置取得"];
     } else {
@@ -47,8 +47,14 @@
     self.locationManager.delegate = self;
 
     // 許可状態を確認して、必要ならリクエスト
-    [self.locationManager requestWhenInUseAuthorization];
+    //[self.locationManager requestWhenInUseAuthorization];
+    CLAuthorizationStatus licence_status = self.locationManager.authorizationStatus;
+    if (licence_status == kCLAuthorizationStatusAuthorizedWhenInUse ||
+        licence_status == kCLAuthorizationStatusAuthorizedAlways) {
+        [self.locationManager startUpdatingLocation];
+    }
 }
+
 
 - (void)viewWillAppear:(BOOL)animated {
     buttonExec.enabled = true;
@@ -60,38 +66,20 @@
 
 #pragma mark - CLLocationManagerDelegate
 
+
 - (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager {
-    CLAuthorizationStatus status = manager.authorizationStatus;
-
-    switch (status) {
-        case kCLAuthorizationStatusNotDetermined:
-            // 初回許可リクエスト
-            [manager requestWhenInUseAuthorization];
-            self->mLocation = 1;
-            break;
-
-        case kCLAuthorizationStatusDenied:
-            NSLog(@"位置情報が拒否されています");
-            break;
-
-        case kCLAuthorizationStatusAuthorizedWhenInUse:
-        case kCLAuthorizationStatusAuthorizedAlways:
-            NSLog(@"位置情報が許可されています");
-
-            // 警告原因の locationServicesEnabled は削除
-            // 許可がある場合はそのまま開始
-            [manager startUpdatingLocation];
-            break;
-
-        default:
-            break;
+    CLAuthorizationStatus licence_status = manager.authorizationStatus;
+    if (licence_status == kCLAuthorizationStatusAuthorizedWhenInUse ||
+        licence_status == kCLAuthorizationStatusAuthorizedAlways) {
+        [manager startUpdatingLocation];
     }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     CLLocation *location = [locations lastObject];
     
-    // 逆ジオコーディング
+    [manager stopUpdatingLocation];
+    
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
         if (error) {

@@ -63,7 +63,7 @@
 #define APP_ID @"1535413789"
 #define TEST_FLG @"0"
 #define CAREATE_TEST_DATA_FLG @"0"
-#define HTTP_TEST_HOST_NAME @"128.0.3.32/com"
+#define HTTP_TEST_HOST_NAME @"128.0.3.6:8074/com"
 #define HTTP_HOST_NAME @"almanecloud.com"
 #define HTTP_GET_API_URL @"alcoholmanager/linkmanager/api/getApplicationApiUrl"
 #define HTTP_GET_MENU_CONTROL @"alcoholmanager/linkmanager/api/getApplicationMenuControl"
@@ -76,5 +76,15 @@
 #define HTTP_GET_FREE_TITLE @"HttpGetFreeTitleServlet"
 
 #define ALCHOL_REMOVEAL_RATE 0.015f
+
+#define KEY_RECOGNITION_SIMILARITY @"KEY_RECOGNITION_SIMILARITY"
+#define KEY_RECOGNITION_NG @"KEY_RECOGNITION_NG"
+#define KEY_RECOGNITION_ENABLE @"KEY_RECOGNITION_ENABLE"
+#define KEY_API_URL @"KEY_RECOGNITION_URL"
+#define KEY_DRIVER_RECOGNITION_ENABLE @"KEY_DRIVER_RECOGNITION_ENABLE"
+#define HTTP_GET_MANAGER_SYSTEM_VALUE @"alcoholmanager/linkmanager/api/getSystemSettingControl"
+#define HTTP_GET_DRIVER @"HttpDriverMasterServlet"
+#define HTTP_GET_SYSTEM_VALUE @"HttpGetSystemSettingValueServlet"
+#define HTTP_GET_SETTING_CONTROL @"alcoholmanager/linkmanager/api/getApplicationSettingControl"
 
 @end

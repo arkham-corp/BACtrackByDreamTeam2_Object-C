@@ -23,12 +23,14 @@ NS_ASSUME_NONNULL_BEGIN
     __weak IBOutlet UIButton *buttonDrivingReport;
     __weak IBOutlet UIButton *buttonSendList;
     __weak IBOutlet UIButton *buttonReminder;
+    __weak IBOutlet UIButton *buttonExit;
 }
 
 - (IBAction)btnInspectionTouchUpInside:(id)sender;
 - (IBAction)btnDrivinngReportTouchUpInside:(id)sender;
 - (IBAction)btnSendListTouchUpInside:(id)sender;
 - (IBAction)btnReminderTouchUpInside:(id)sender;
+- (IBAction)btnExitTouchUpInside:(id)sender;
 
 @end
 

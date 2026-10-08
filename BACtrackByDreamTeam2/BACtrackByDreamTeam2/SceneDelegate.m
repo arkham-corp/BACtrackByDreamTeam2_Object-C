@@ -18,24 +18,24 @@ willConnectToSession:(UISceneSession *)session
         UIWindowScene *windowScene = (UIWindowScene *)scene;
         self.window = [[UIWindow alloc] initWithWindowScene:windowScene];
 
-        // UINavigationBar の外観設定
         UINavigationBar *navibar = [UINavigationBar appearance];
-        //navibar.backgroundColor = [UIColor whiteColor];
-        //navibar.barTintColor = [UIColor whiteColor];
-        //navibar.tintColor = [UIColor blackColor]; // ボタン色
         navibar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+        navibar.prefersLargeTitles = NO;
 
-        // メイン画面生成
-        MainViewController *viewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
-        self.navigationControl = [[UINavigationController alloc] initWithRootViewController:viewController];
+        // メインスレッドで実行（正しい方法）
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MainViewController *viewController =
+                [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
+            self.navigationControl =
+                [[UINavigationController alloc] initWithRootViewController:viewController];
 
-        [self.navigationControl setNavigationBarHidden:NO animated:NO];
-        [self.navigationControl setToolbarHidden:YES animated:NO];
+            [self.navigationControl setNavigationBarHidden:NO animated:NO];
+            [self.navigationControl setToolbarHidden:YES animated:NO];
 
-        self.window.rootViewController = self.navigationControl;
-        [self.window makeKeyAndVisible];
+            self.window.rootViewController = self.navigationControl;
+            [self.window makeKeyAndVisible];
+        });
     }
 }
-
 @end
 

@@ -10,8 +10,10 @@
 #import <AVFoundation/AVFoundation.h>
 #import "BACtrack.h"
 #import "ResultViewController.h"
+#import "CameraManager.h"
 
-@interface InspectionViewController : UIViewController<AVCaptureVideoDataOutputSampleBufferDelegate>
+@interface InspectionViewController : UIViewController<AVCaptureVideoDataOutputSampleBufferDelegate, AVCapturePhotoCaptureDelegate>
+
 {
     ResultViewController *resultViewController;
     
@@ -36,5 +38,13 @@
 @property AVCaptureVideoPreviewLayer *videoPreviewLayer;
 @property (nonatomic) AVCaptureDeviceInput *videoInput;
 @property (nonatomic) AVCapturePhotoOutput *stillImageOutput;
-
 @end
+
+@interface InspectionViewController () <BacTrackAPIDelegate>
+{
+    BacTrackAPI *mBacTrack;
+    NSInteger mUseCamera;
+    NSInteger mTakePhoto;
+}
+@end
+

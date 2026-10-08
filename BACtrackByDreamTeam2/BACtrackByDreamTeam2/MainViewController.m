@@ -21,7 +21,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    // ナビゲーションバーのラージタイトルを強制的にOFFにする
+        if (@available(iOS 11.0, *)) {
+            self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+        }
+    // 権限フラグ初期化
+    _cameraGranted = NO;
+    _locationGranted = NO;
+    _bluetoothGranted = NO;
+
     NSString *appVer = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     
     RLMRealmConfiguration *config = [RLMRealmConfiguration defaultConfiguration];
@@ -39,36 +47,32 @@
 
     [self setTitle:@"トップ画面"];
     
-    buttonExec.exclusiveTouch = true;
-    buttonExec.enabled = false;
+    buttonExec.enabled = NO;
     
     // 利用規約判定
-    if (![agreement isEqualToString:@"1"])
-    {
-        AgreementViewController *agreementViewController = [[AgreementViewController alloc] init];
-        [self presentViewController:agreementViewController animated:YES completion:nil];
+    if (![agreement isEqualToString:@"1"]) {
+        [self showAgreementViewController];
+    } else {
+        // 同意済み → 権限確認へ
+        [self requestCameraPermission];
+        [self versionCeck];
     }
-        
-    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-    
-    if (status == AVAuthorizationStatusNotDetermined)
-    {
-        // アプリで初めてカメラ機能を使用する場合
-        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted)
-        {
-              if (granted)
-              {
-                  // 使用が許可された場合
-              }
-              else
-              {
-                  // 使用が不許可になった場合
-              }
-        }];
-    }
-    
-    [self versionCeck];
-    
+
+}
+
+- (void)showAgreementViewController {
+    AgreementViewController *agreementVC = [[AgreementViewController alloc] init];
+    agreementVC.completionHandler = ^(BOOL agreed) {
+        if (agreed) {
+            // 同意 → 権限確認へ
+            [self requestCameraPermission];
+            [self versionCeck];
+        } else {
+            // 不同意 → 利用規約画面を再表示
+            self->buttonExec.enabled = NO;
+        }
+    };
+    [self presentViewController:agreementVC animated:YES completion:nil];
 }
 
 - (void)versionCeck
@@ -96,41 +100,26 @@
     [task resume];
 }
 
-/**
- * HTTPリクエストのデリゲートメソッド(データ受け取り初期処理)
- */
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+    - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
                                  didReceiveResponse:(NSURLResponse *)response
                                   completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
-    // 保持していたレスポンスのデータを初期化
     receivedData = [[NSMutableData alloc] init];
-
-    // didReceivedData と didCompleteWithError が呼ばれるように、通常継続の定数をハンドラーに渡す
     completionHandler(NSURLSessionResponseAllow);
 }
 
-/**
- * HTTPリクエストのデリゲートメソッド(受信の度に実行)
- */
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
-    // 1つのパケットに収まらないデータ量の場合は複数回呼ばれるので、データを追加していく
     [receivedData appendData:data];
 }
 
-/**
- * HTTPリクエストのデリゲートメソッド(完了処理)
- */
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
     if (error) {
         // HTTPリクエスト失敗処理
         buttonExec.enabled = true;
     } else {
-        // HTTPリクエスト成功処理
         [self successHttpRequest];
     }
 }
 
-// データ受信が終わったら呼び出されるメソッド。
 - (void) successHttpRequest {
         
     NSDictionary *versionSummary  = [NSJSONSerialization JSONObjectWithData:receivedData
@@ -175,7 +164,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    buttonExec.enabled = true;
+    buttonExec.enabled = _cameraGranted && _locationGranted && _bluetoothGranted;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -183,20 +172,108 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
-
 - (IBAction)btnDecisionTouchUpInside:(id)sender {
     buttonExec.enabled = false;
     companyViewController = [[CompanyViewController alloc] initWithNibName:@"CompanyViewController" bundle:nil];
     [self.navigationController pushViewController:companyViewController animated:YES];
 }
+// 全権限確認完了後にボタン状態を決定
+- (void)updateButtonState {
+    BOOL allGranted = _cameraGranted && _locationGranted && _bluetoothGranted;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self->buttonExec.enabled = allGranted;
+        
+        if (!allGranted) {
+            // 拒否された権限をアラートで通知
+            NSMutableArray *denied = [NSMutableArray array];
+            if (!self->_cameraGranted)       [denied addObject:@"カメラ"];
+            if (!self->_locationGranted)     [denied addObject:@"位置情報"];
+            if (!self->_bluetoothGranted)    [denied addObject:@"Bluetooth"];
+            
+            NSString *message = [NSString stringWithFormat:@"以下の権限が許可されていません。設定アプリから許可してください。\n\n%@",
+                                 [denied componentsJoinedByString:@"\n"]];
+            
+            UIAlertController *alert = [UIAlertController
+                alertControllerWithTitle:@"権限エラー"
+                message:message
+                preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"設定を開く"
+                                                     style:UIAlertActionStyleDefault
+                                                   handler:^(UIAlertAction *a) {
+                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"キャンセル"
+                                                     style:UIAlertActionStyleCancel
+                                                   handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+         
+    });
+}
 
+// 1. カメラ権限
+- (void)requestCameraPermission {
+    AVAuthorizationStatus status = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    if (status == AVAuthorizationStatusNotDetermined) {
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+            self->_cameraGranted = granted;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self requestLocationPermission];
+            });
+        }];
+    } else {
+        _cameraGranted = (status == AVAuthorizationStatusAuthorized);
+        [self requestLocationPermission];
+    }
+}
+
+// 2. 位置情報権限
+- (void)requestLocationPermission {
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    
+    CLAuthorizationStatus status = self.locationManager.authorizationStatus;
+    if (status == kCLAuthorizationStatusNotDetermined) {
+        [self.locationManager requestWhenInUseAuthorization];
+        // デリゲートで次へ
+    } else {
+        _locationGranted = (status == kCLAuthorizationStatusAuthorizedWhenInUse ||
+                            status == kCLAuthorizationStatusAuthorizedAlways);
+        [self requestBluetoothPermission];
+    }
+}
+
+// CLLocationManagerDelegate
+- (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager {
+    CLAuthorizationStatus status = manager.authorizationStatus;
+    if (status != kCLAuthorizationStatusNotDetermined) {
+        _locationGranted = (status == kCLAuthorizationStatusAuthorizedWhenInUse ||
+                            status == kCLAuthorizationStatusAuthorizedAlways);
+        [self requestBluetoothPermission];
+    }
+}
+
+// 3. Bluetooth権限
+- (void)requestBluetoothPermission {
+    self.bluetoothManager = [[CBCentralManager alloc] initWithDelegate:self queue:nil];
+}
+
+// CBCentralManagerDelegate
+- (void)centralManagerDidUpdateState:(CBCentralManager *)central {
+    BOOL granted;
+    
+    if (@available(iOS 13.1, *)) {
+        granted = (CBCentralManager.authorization == CBManagerAuthorizationAllowedAlways);
+    } else {
+        granted = (central.state != CBManagerStateUnauthorized);
+    }
+    
+    _bluetoothGranted = granted;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateButtonState];
+    });
+}
+                   
 @end

@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "DriverViewController.h"
+#import "FaceRecognitionViewController.h"
 
 @interface DrivingDivViewController : UIViewController
 {
     DriverViewController *driverViewController;
+    FaceRecognitionViewController *faceRecognitionViewController;
     __weak IBOutlet UISegmentedControl *segmentedDrivingDiv;
     __weak IBOutlet UIButton *buttonExec;
 }

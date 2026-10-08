@@ -25,6 +25,7 @@
     buttonDrivingReport.exclusiveTouch = true;
     buttonSendList.exclusiveTouch = true;
     buttonReminder.exclusiveTouch = true;
+    buttonExit.exclusiveTouch = true;
     
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
     NSString *app_driving_report_enabled = [ud stringForKey:KEY_MENU_DRIVING_REPORT_ENABLED];
@@ -43,6 +44,12 @@
     {
         buttonReminder.hidden = true;
     }
+    if (![app_driving_report_enabled isEqualToString:@"1"] &&
+        ![app_send_list_enabled isEqualToString:@"1"] &&
+        ![app_reminder_enabled isEqualToString:@"1"])
+    {
+        buttonExit.hidden = true;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -51,6 +58,7 @@
     buttonDrivingReport.enabled = true;
     buttonSendList.enabled = true;
     buttonReminder.enabled = true;
+    buttonExit.enabled = true;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -304,6 +312,8 @@
     buttonDrivingReport.enabled = false;
     buttonSendList.enabled = false;
     buttonReminder.enabled = false;
+    buttonExit.enabled = false;
+    
     gpsViewController = [[GPSViewController alloc] initWithNibName:@"GPSViewController" bundle:nil];
     [self.navigationController pushViewController:gpsViewController animated:YES];
 }
@@ -314,6 +324,7 @@
     buttonDrivingReport.enabled = false;
     buttonSendList.enabled = false;
     buttonReminder.enabled = false;
+    buttonExit.enabled = false;
     
     [self getFreeTitle];
 }
@@ -323,6 +334,7 @@
     buttonDrivingReport.enabled = false;
     buttonSendList.enabled = false;
     buttonReminder.enabled = false;
+    buttonExit.enabled = false;
     sendListViewController = [[SendListViewController alloc] initWithNibName:@"SendListViewController" bundle:nil];
     [self.navigationController pushViewController:sendListViewController animated:YES];
 }
@@ -332,7 +344,18 @@
     buttonDrivingReport.enabled = false;
     buttonSendList.enabled = false;
     buttonReminder.enabled = false;
+    buttonExit.enabled = false;
     reminderViewController = [[ReminderViewController alloc] initWithNibName:@"ReminderViewController" bundle:nil];
     [self.navigationController pushViewController:reminderViewController animated:YES];
 }
+
+- (IBAction)btnExitTouchUpInside:(id)sender {
+    buttonInspection.enabled = false;
+    buttonDrivingReport.enabled = false;
+    buttonSendList.enabled = false;
+    buttonReminder.enabled = false;
+    buttonExit.enabled = false;
+    exit(0);
+}
+
 @end

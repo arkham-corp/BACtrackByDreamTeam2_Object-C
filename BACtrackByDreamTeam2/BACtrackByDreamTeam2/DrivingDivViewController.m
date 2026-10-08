@@ -14,16 +14,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//20231214
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    NSString *status = [ud stringForKey:KEY_CONECTION_STATUS];
+    NSString *status = [ud stringForKey:KEY_CHECK_MODE];
 
     if([status isEqual:(@"0")]) {
         [self setTitle:@"乗務前後"];
     } else {
         [self setTitle:@"乗務前後（無通信モード）"];
     }
-//20231214
 
     buttonExec.exclusiveTouch = true;
 }
@@ -35,21 +33,34 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (IBAction)btnDecisionTouchUpInside:(id)sender {
     buttonExec.enabled = false;
+    [self.view endEditing:YES];
     
-    // 値保存
     NSString *drivingDiv = [NSString stringWithFormat:@"%ld", (long)segmentedDrivingDiv.selectedSegmentIndex];
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
     [ud setObject:drivingDiv forKey:KEY_DRIVING_DIV];
     [ud synchronize];
-            
-    // 移動
-    driverViewController = [[DriverViewController alloc] initWithNibName:@"DriverViewController" bundle:nil];
-    [self.navigationController pushViewController:driverViewController animated:YES];
+
+    NSString *status = [ud stringForKey:KEY_CHECK_MODE];
+
+    if([status isEqual:(@"0")]) {
+        NSString *recognition_enable = [ud stringForKey:KEY_RECOGNITION_ENABLE];
+        if ([recognition_enable isEqualToString:@"1"] ) {
+            faceRecognitionViewController = [[FaceRecognitionViewController alloc] initWithNibName:@"FaceRecognitionViewController" bundle:nil];
+            [self.navigationController pushViewController:faceRecognitionViewController animated:YES];
+        }
+        else
+        {
+            driverViewController = [[DriverViewController alloc] initWithNibName:@"DriverViewController" bundle:nil];
+            [self.navigationController pushViewController:driverViewController animated:YES];
+        }
+    } else {
+        driverViewController = [[DriverViewController alloc] initWithNibName:@"DriverViewController" bundle:nil];
+        [self.navigationController pushViewController:driverViewController animated:YES];
+    }
 }
 
 @end

@@ -10,6 +10,7 @@
 #import "AppConsts.h"
 #import "Realm/Realm.h"
 #import "RealmLocalDataAlcoholResult.h"
+#import "MenuViewController.h"
 
 @interface ResultViewController () <NSURLSessionDataDelegate>
 {
@@ -25,14 +26,16 @@ int retryCount = 0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
     
     btnEnd.exclusiveTouch = true;
     [btnEnd setEnabled:false];
+    
+    btnMenu.exclusiveTouch = true;
+    [btnMenu setEnabled:false];
+    
     retryCount = 0;
     
     NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-//20231214
     NSString *status = [ud stringForKey:KEY_CHECK_MODE];
 
     if([status isEqual:(@"0")]) {
@@ -42,7 +45,6 @@ int retryCount = 0;
         [self setTitle:@"測定結果（無通信モード）"];
         [lblSending setText:@"無通信モード"];
     }
-//20231214
     
     NSString *driving_div = [ud stringForKey:KEY_DRIVING_DIV];
     NSString *value = [ud stringForKey:KEY_ALCOHOL_VALUE];
@@ -110,9 +112,23 @@ int retryCount = 0;
     
     [lblRemoval setText:[NSString stringWithFormat:@"%@ です", result]];
     
-//20231214
     [ud setObject:@"0" forKey:KEY_SEND_FLG];
     [ud synchronize];
+    
+    NSString *app_roll_call_enabled = [ud stringForKey:KEY_MENU_DRIVING_REPORT_ENABLED];
+    NSString *app_send_list_enabled = [ud stringForKey:KEY_MENU_SEND_LIST];
+    NSString *app_reminder_enabled = [ud stringForKey:KEY_MENU_REMINDER_ENABLED];
+
+    if ([app_roll_call_enabled isEqualToString:@"1"] ||
+        [app_send_list_enabled isEqualToString:@"1"] ||
+        [app_reminder_enabled isEqualToString:@"1"])
+    {
+        [btnMenu setHidden:NO];
+    }
+    else
+    {
+        [btnMenu setHidden:YES];
+    }
 
     if([status isEqual:(@"0")]) {
         
@@ -120,9 +136,9 @@ int retryCount = 0;
         
     } else {
         [btnEnd setEnabled:true];
+        [btnMenu setEnabled:true];
     }
     [self SaveData];
-//20231214
 
 }
 
@@ -130,16 +146,6 @@ int retryCount = 0;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (void)sendData {
     
@@ -252,30 +258,17 @@ int retryCount = 0;
     [task resume];
 }
 
-/**
- * HTTPリクエストのデリゲートメソッド(データ受け取り初期処理)
- */
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
                                  didReceiveResponse:(NSURLResponse *)response
                                   completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler {
-    // 保持していたレスポンスのデータを初期化
     receivedData = [[NSMutableData alloc] init];
-
-    // didReceivedData と didCompleteWithError が呼ばれるように、通常継続の定数をハンドラーに渡す
     completionHandler(NSURLSessionResponseAllow);
 }
 
-/**
- * HTTPリクエストのデリゲートメソッド(受信の度に実行)
- */
 - (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
-    // 1つのパケットに収まらないデータ量の場合は複数回呼ばれるので、データを追加していく
     [receivedData appendData:data];
 }
 
-/**
- * HTTPリクエストのデリゲートメソッド(完了処理)
- */
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error {
     if (error) {
         // HTTPリクエスト失敗処理
@@ -314,27 +307,25 @@ int retryCount = 0;
     {
         [lblSending setText:@"送信成功"];
         [lblSending setTextColor:[UIColor systemGreenColor]];
-//20231214
         // 値保存
         NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
         [ud setObject:@"2" forKey:KEY_SEND_FLG];
         [ud synchronize];
         [self UpdateSendKey];
-//20231214
         [btnEnd setEnabled:true];
+        [btnMenu setEnabled:true];
     }
     else if ([trim isEqualToString:@"KEY_NG"])
     {
         [lblSending setText:@"送信済みです"];
         [lblSending setTextColor:[UIColor systemRedColor]];
-//20231214
         // 値保存
         NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
         [ud setObject:@"2" forKey:KEY_SEND_FLG];
         [ud synchronize];
         [self UpdateSendKey];
-//20231214
         [btnEnd setEnabled:true];
+        [btnMenu setEnabled:true];
     }
     else
     {
@@ -350,7 +341,6 @@ int retryCount = 0;
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    // エラー情報を表示する。
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"エラー" message:@"送信に失敗しました。\n再送信します。" preferredStyle:UIAlertControllerStyleAlert];
     
     [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
@@ -371,31 +361,24 @@ int retryCount = 0;
         [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action)
         {
             [self->btnEnd setEnabled:true];
+            [self->btnMenu setEnabled:true];
         }]];
         
         [self presentViewController:alert animated:YES completion:nil];
         
         [lblSending setText:@"送信失敗"];
         [lblSending setTextColor:[UIColor systemRedColor]];
-//20231214
         // 値保存
         NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
         [ud setObject:@"0" forKey:KEY_SEND_FLG];
         [ud synchronize];
         [self UpdateSendKey];
-//20231214
 
     } else {
-        //[self performSelector:@selector(sendData) withObject:nil afterDelay:60.0];
         [self sendData];
     }
 }
 
-- (IBAction)btnEndTouchUpInside:(id)sender {
-    exit(0);
-}
-
-//2023/12/15
 - (void)SaveData
 {
     RLMRealm *realm = [RLMRealm defaultRealm];
@@ -430,13 +413,9 @@ int retryCount = 0;
     [df setDateFormat:@"yyyy/MM/dd HH:mm:ss"];
     NSDate *date = [df dateFromString:alcoholResult.inspection_time];
 
-//    NSDateFormatter *df1 =[[NSDateFormatter alloc] init];
-//    [df1 setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"ja_JP"]]; // Localeの指定
     [df setDateFormat:@"yyyyMMdd"];
     alcoholResult.inspection_ymd = [df stringFromDate:date];
     
-//    NSDateFormatter *df2 =[[NSDateFormatter alloc] init];
-//    [df2 setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"ja_JP"]]; // Localeの指定
     [df setDateFormat:@"HHmm"];
     alcoholResult.inspection_hm = [df stringFromDate:date];
         
@@ -543,6 +522,59 @@ int retryCount = 0;
         
         [realm commitWriteTransaction];
     }
+}
+
+- (IBAction)btnEndTouchUpInside:(id)sender {
+    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    
+    // 保存値クリア
+    [ud removeObjectForKey:@"KEY_LOCATION_ADDRESS"];
+    [ud removeObjectForKey:@"KEY_LOCATION_LATITUDE"];
+    [ud removeObjectForKey:@"KEY_LOCATION_LONGITUDE"];
+    [ud removeObjectForKey:@"KEY_ALCOHOL_VALUE"];
+    [ud removeObjectForKey:@"KEY_ALCOHOL_VALUE_DIV"];
+    [ud removeObjectForKey:@"KEY_PHOTO"];
+    [ud removeObjectForKey:@"KEY_INSPECTION_TIME"];
+    [ud removeObjectForKey:@"KEY_BREATHALYZER_UUID"];
+    [ud synchronize];
+    
+    exit(0);
+}
+
+- (IBAction)btnMenuTouchUpInside:(id)sender {
+    
+    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
+    // 保存値クリア
+    [ud removeObjectForKey:@"KEY_LOCATION_ADDRESS"];
+    [ud removeObjectForKey:@"KEY_LOCATION_LATITUDE"];
+    [ud removeObjectForKey:@"KEY_LOCATION_LONGITUDE"];
+    [ud removeObjectForKey:@"KEY_ALCOHOL_VALUE"];
+    [ud removeObjectForKey:@"KEY_ALCOHOL_VALUE_DIV"];
+    [ud removeObjectForKey:@"KEY_PHOTO"];
+    [ud removeObjectForKey:@"KEY_INSPECTION_TIME"];
+    [ud removeObjectForKey:@"KEY_BREATHALYZER_UUID"];
+    [ud synchronize];
+    
+    NSString *app_roll_call_enabled = [ud stringForKey:KEY_MENU_DRIVING_REPORT_ENABLED];
+    NSString *app_send_list_enabled = [ud stringForKey:KEY_MENU_SEND_LIST];
+    NSString *app_reminder_enabled = [ud stringForKey:KEY_MENU_REMINDER_ENABLED];
+
+    if ([app_roll_call_enabled isEqualToString:@"1"] ||
+        [app_send_list_enabled isEqualToString:@"1"] ||
+        [app_reminder_enabled isEqualToString:@"1"])
+    {
+        // メニュー画面に移動
+        for (UIViewController *vc in self.navigationController.viewControllers)
+        {
+            if ([vc isKindOfClass:[MenuViewController class]])
+            {
+                [self.navigationController popToViewController:vc animated:YES];
+                return;
+            }
+        }
+    }
+    exit(0);
 }
 
 @end
